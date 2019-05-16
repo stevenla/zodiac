@@ -1,0 +1,334 @@
+id,name,lp,category
+1,Belias,20,summon
+2,Mateus,30,summon
+3,Zalera,30,summon
+4,Adrammelech,35,summon
+5,Cuchulainn,50,summon
+6,Shemhazai,50,summon
+7,Hashmal,50,summon
+8,Exodus,65,summon
+9,Zeromus,65,summon
+10,Famfrit,100,summon
+11,Chaos,100,summon
+12,Ultima,115,summon
+13,Zodiark,200,summon
+q1,Quickening 1,50,quickening
+q2,Quickening 2,75,quickening
+q3,Quickening 3,100,quickening
+q4,Quickening 4,125,quickening
+o,Battle Command,0,board
++,Second Board,30,board
+g1,Gambit,15,gambit
+g2,Gambit,20,gambit
+g3,Gambit,25,gambit
+g4,Gambit,30,gambit
+g5,Gambit,35,gambit
+g6,Gambit,40,gambit
+g7,Gambit,45,gambit
+g8,Gambit,50,gambit
+g9,Gambit,70,gambit
+g10,Gambit,100,gambit
+hp1,+30HP,20,hp
+hp2,+70HP,30,hp
+hp3,+110HP,40,hp
+hp4,+150HP,50,hp
+hp5,+190HP,60,hp
+hp6,+230HP,70,hp
+hp7,+270HP,80,hp
+hp8,+310HP,90,hp
+hp9,+350HP,100,hp
+hp10,+390HP,115,hp
+hp11,+435HP,130,hp
+ma,Martyr,30,passive
+in,Inquisitor,30,passive
+he,Headsman,30,passive
+sp,Spellbound,30,passive
+fo,Focus,70,passive
+ls,Last Stand,70,passive
+br,Brawler,70,passive
+ad,Adrenaline,70,passive
+wa,Warmage,30,passive
+sb,Spellbreaker,65,passive
+se,Serenity,70,passive
+ml1,Magick Lore 1,30,magicklore
+ml2,Magick Lore 2,30,magicklore
+ml3,Magick Lore 3,30,magicklore
+ml4,Magick Lore 4,30,magicklore
+ml5,Magick Lore 5,50,magicklore
+ml6,Magick Lore 6,50,magicklore
+ml7,Magick Lore 7,50,magicklore
+ml8,Magick Lore 8,50,magicklore
+ml9,Magick Lore 9,70,magicklore
+ml10,Magick Lore 10,70,magicklore
+ml11,Magick Lore 11,70,magicklore
+ml12,Magick Lore 12,70,magicklore
+ml13,Magick Lore 13,100,magicklore
+ml14,Magick Lore 14,100,magicklore
+ml15,Magick Lore 15,100,magicklore
+ml16,Magick Lore 16,100,magicklore
+ch1,Channelling 1,30,channelling
+ch2,Channelling 2,50,channelling
+ch3,Channelling 3,80,channelling
+sw1,Swiftness 1,30,swiftness
+sw2,Swiftness 2,50,swiftness
+sw3,Swiftness 3,80,swiftness
+bl1,Battle Lore 1,30,battlelore
+bl2,Battle Lore 2,30,battlelore
+bl3,Battle Lore 3,30,battlelore
+bl4,Battle Lore 4,30,battlelore
+bl5,Battle Lore 5,50,battlelore
+bl6,Battle Lore 6,50,battlelore
+bl7,Battle Lore 7,50,battlelore
+bl8,Battle Lore 8,50,battlelore
+bl9,Battle Lore 9,70,battlelore
+bl10,Battle Lore 10,70,battlelore
+bl11,Battle Lore 11,70,battlelore
+bl12,Battle Lore 12,70,battlelore
+bl13,Battle Lore 13,100,battlelore
+bl14,Battle Lore 14,100,battlelore
+bl15,Battle Lore 15,100,battlelore
+bl16,Battle Lore 16,100,battlelore
+sb1,Shield Block 1,25,shieldblock
+sb2,Shield Block 2,45,shieldblock
+sb3,Shield Block 3,75,shieldblock
+pol1,Potion Lore 1,20,potionlore
+pol2,Potion Lore 2,35,potionlore
+pol3,Potion Lore 3,70,potionlore
+phl1,Phoenix Lore 1,30,phoenixlore
+phl2,Phoenix Lore 2,50,phoenixlore
+phl3,Phoenix Lore 3,90,phoenixlore
+rl1,Remedy Lore 1,20,remedylore
+rl2,Remedy Lore 2,30,remedylore
+rl3,Remedy Lore 3,70,remedylore
+el1,Ether Lore 1,20,etherlore
+el2,Ether Lore 2,35,etherlore
+el3,Ether Lore 3,70,etherlore
+t1,Steal,20,technick
+t2,First Aid,20,technick
+t3,Libra,24,technick
+t4,Poach,30,technick
+t5,Charm,30,technick
+t6,Charge,30,technick
+t7,Infuse,30,technick
+t8,Gil Toss,30,technick
+t9,Bonecrusher,30,technick
+t10,1000 Needles,35,technick
+t11,Souleater,35,technick
+t12,Stamp,40,technick
+t13,Achilles,40,technick
+t14,Revive,40,technick
+t15,Sight Unseeing,40,technick
+t16,Numerology,40,technick
+t17,Horology,50,technick
+t18,Traveller,50,technick
+t19,Wither,50,technick
+t20,Addle,50,technick
+t21,Expose,50,technick
+t22,Shear,50,technick
+t23,Shades of Black,70,technick
+t24,Telekinesis,80,technick
+blk1,Fire / Thunder,15,blackmagick
+blk2,Blizzard / Blind,20,blackmagick
+blk3,Aqua / Silence,25,blackmagick
+blk4,Aero / Sleep,30,blackmagick
+blk5,Fira / Poison,40,blackmagick
+blk6,Thundara / Blizzara,50,blackmagick
+blk7,Bio / Blindga,60,blackmagick
+blk8,Aeroga / Silencega,70,blackmagick
+blk9,Firaga / Thundaga,90,blackmagick
+blk10,Blizzaga / Sleepga,90,blackmagick
+blk11,Shock / Toxify,100,blackmagick
+blk12,Flare / Scourge,120,blackmagick
+blk13,Scathe,165,blackmagick
+w1,Cure / Blindna,15,whitemagick
+w2,Poisona / Vox,20,whitemagick
+w3,Shell / Protect,25,whitemagick
+w4,Cura / Raise,30,whitemagick
+w5,Stona / Dispel,40,whitemagick
+w6,Curaga / Regen,50,whitemagick
+w7,Esuna / Cleanse,60,whitemagick
+w8,Confuse / Faith,70,whitemagick
+w9,Curaja / Bravery,80,whitemagick
+w10,Arise / Dispelga,90,whitemagick
+w11,Holy / Esunaga,100,whitemagick
+w12,Protectga / Shellga,110,whitemagick
+w13,Renew,155,whitemagick
+grn1,Oil / Decoy,40,greenmagick
+grn2,Reverse / Drain,50,greenmagick
+grn3,Bubble / Syphon,90,greenmagick
+arc1,Dark / Darkra,40,arcanemagick
+arc2,Darkga / Death,110,arcanemagick
+arc3,Ardor,50,arcanemagick
+tim1,Slow / Immobilize,20,timemagick
+tim2,Disable / Reflect,30,timemagick
+tim3,Vanish / Balance,40,timemagick
+tim4,Haste / Gravity,50,timemagick
+tim5,Stop / Bleed,60,timemagick
+tim6,Break / Countdown,70,timemagick
+tim7,Float / Berserk,80,timemagick
+tim8,Warp / Vanishga,90,timemagick
+tim9,Slowga / Reflectga,100,timemagick
+tim10,Hastega / Graviga,125,timemagick
+a1,Orrachea Armlet,5,accessory
+a2,Firefly / Bangle,20,accessory
+a3,Diamond / Argyle Armlets,25,accessory
+a4,Battle Harness / Steel Gorget,35,accessory
+a5,Embroidered Tippet / Tourmaline Ring,35,accessory
+a6,Golden Amulet / Leather Gorget,35,accessory
+a7,Turtleshell Choker / Rose Corsage,40,accessory
+a8,Thief's Cuffs / Gauntlets,45,accessory
+a9,Amber Armlet / Black Belt,30,accessory
+a10,Jade Collar / Nishijin Belt,40,accessory
+a11,Pheasant Netsuke / Blazer Glvoes,45,accessory
+a12,Gillie Boots / Steel Poleyns,60,accessory
+a13,Armguard / Magick Gloves,60,accessory
+a14,Sage's Ring / Agate Ring,70,accessory
+a15,Ruby Ring / Bowline Sash,70,accessory
+a16,Cameo Belt / Cat-Ear Hood,70,accessory
+a17,Bubble Belt / Fuzzy Mitre,80,accessory
+a18,Sash / Power Armlet,80,accessory
+a19,Indigo Pendant / Winged Boots,100,accessory
+a20,Opal Ring / Mermes Sandals,115,accessory
+a21,Quasimodo Boots / Nihopaloa,130,accessory
+a22,Germina Boots / Ring of Renewal,160,accessory
+a23,Ribbon,215,accessory
+l1,Leather Clothing / Leather Cap,10,lightarmor
+l2,Chromed Leathers / Chromed Headgear / Leather Breastplate / Leather Headguard,15,lightarmor
+l3,Bronze Chestplate / Leather Headgear / Ringmail / Horned Hat,20,lightarmor
+l4,Windbreaker / Balaclava / Heavy Coat / Soldier's Cap,25,lightarmor
+l5,Survival Vest / Green Beret / Brigandine / Red Cap,30,lightarmor
+l6,Jujitsu Gi / Headband / Viking Coat / Pirate Hat,40,lightarmor
+l7,Metal Jerkin / Goggle Mask / Adamant Vest / Adamant Hat,50,lightarmor
+l8,Barrel Coat / Officer Hat / Power Vest / Chakra Band,60,lightarmor
+l9,Ninja Gear / Theif's Cap / Gigas Chestplate / Gigas Hat,70,lightarmor
+l10,Minerva Bustier / Chaperon,75,lightarmor
+l11,Rubber Suit / Crown of Laurels,80,lightarmor
+l12,Mirage Vest / Renewing Morion,90,lightarmor
+l13,Brave Suit / Dueling Mask,110,lightarmor
+m1,Cotton Shirt / Cotton Cap / Light Woven Shirt / Magick Curch,10,mysticarmor
+m2,Silken Shirt / Pointy Hat / Kilimweave Shirt / Topkapi Hat,15,mysticarmor
+m3,Shepherd's Bolera / Calot Hat / Wizard's Robe / Wizard's Hat,20,mysticarmor
+m4,Chanter's Djellaba / Lambent Hat / Traveler's Vestment / Feathered Cap,25,mysticarmor
+m5,Mage's Habit / Mage's Hat / Enchanter's Habit / Lamia's Tiara,30,mysticarmor
+m6,Sorcerer's Habit / Sorcerer's Hat / Black Garb / Black Cowl,40,mysticarmor
+m7,Carmagnole / Gaia Hat / Maduin Gear / Astrakhan,50,mysticarmor
+m8,Jade Gown / Hypnocrown / Gaia Gear / Gold Hairpin,60,mysticarmor
+m9,Cleric's Robes / Celebrant's Miter,70,mysticarmor
+m10,Black Robes / Black Mask,75,mysticarmor
+m11,White Robes / White Mask,80,mysticarmor
+m12,Glimmering Robes / Golden Skullcap,90,mysticarmor
+m13,Lordly Robes / Circlet,110,mysticarmor
+h1,Leather Armor / Leather Helm / Bronze Armor / Bronze Helm,25,heavyarmor
+h2,Scala Armor / Scale Sallet / Iron Armor / Iron Helm,30,heavyarmor
+h3,Linen Cuirass / Linen Barbut / Chainmail / Winged Helm,35,heavyarmor
+h4,Golden Armor / Golden Helm / Shielded Armor / burgonet,40,heavyarmor
+h5,Demon Mail / Close Helmet / Bone Mail / Bone Helm,50,heavyarmor
+h6,Diamond Armor / Diamond Helm,55,heavyarmor
+h7,Mirror Mail / Steel Mask,60,heavyarmor
+h8,Platinum Armor / Platinum Helm,60,heavyarmor
+h9,Carabineer Mail / Giant's Helmet,70,heavyarmor
+h10,Dragon Mail / Dragon Helm,80,heavyarmor
+h11,Maximillian / Magepower Shishak,90,heavyarmor
+h12,Grand Armor / Grand Helm,110,heavyarmor
+ga,Genji Helm / Genji Shield / Genji Armor / Genji Gloves,190,genjiarmor
+d1,Dagger,15,dagger
+d2,Mage Masher / Assassin's Dagger,20,dagger
+d3,Chopper / Main Gauche,35,dagger
+d4,Gladius / Avenger,45,dagger
+d5,Orichalcum Dirk / Platinum Dagger,60,dagger
+d6,Zwill Crossblade,80,dagger
+d7,Nagasa / Mina,220,dagger
+ns1,Ashura / Sakura-zaezuri / Kagenui / Orochi,100,ninjasword
+ns2,Iga Blade,120,ninjasword
+ns3,Koga Blade,120,ninjasword
+ns4,Yagyu Darkblade / Mesa,180,ninjasword
+b1,Shortbow,20,bow
+b2,Silver Bow / Aevis Killer,30,bow
+b3,Killer Bow / Long Bow,35,bow
+b4,Elfin Bow / Loxley Bow,45,bow
+b5,Giant Stonebow / Burning Bow,50,bow
+b6,Traitor's Bow / Yoichi Bow,70,bow
+b7,Perseus Bow / Artemis Bow,90,bow
+b8,Saggitarius,130,bow
+b9,Dhanusha,200,bow
+gun1,Altair,30,gun
+gun2,Capella / Vega,50,gun
+gun3,Sirius / Betelgeuse,60,gun
+gun4,Ras Algethi / Aldebaran,70,gun
+gun5,Spica / Antares,90,gun
+gun6,Arcturus / Fomalhaut,100,gun
+gun7,Mithuna,190,gun
+sh1,Escutcheon / Leather Shield,15,shield
+sh2,Bronze Shield / Round Shield,20,shield
+sh3,Golden Shield / Ice Shield / Flame Shield,25,shield
+sh4,Diamond Shield / Platinum Shield / Dragon Shield,30,shield
+sh5,Crystal Shield / Kaiser Shield,35,shield
+sh6,Aegis Shield / Demon Shield,40,shield
+sh7,Venetian Shield,65,shield
+sh8,Shell Shield,90,shield
+sh9,Ensanguined Shield,100,shield
+sh10,Zodiac Escutcheon,235,shield
+mea1,Gilt Measure,40,measure
+mea2,Arc Scale / Multi Scale,50,measure
+mea3,Cross Scale / Caliper,70,measure
+mea4,Euclid's Sextant,100,measure
+hb1,Hornito,35,handbomb
+hb2,Fumarole / Tumulus,55,handbomb
+hb3,Caldera / Volcano,75,handbomb
+hb4,Makara,105,handbomb
+p1,Oaken Pole / Cypress Pole,20,pole
+p2,Battle Bamboo,30,pole
+p3,Musk Stick / Iron Pole,35,pole
+p4,Six-fluted Pole / Gokuu Pole,40,pole
+p5,Zephyr Pole / Ivory Pole,50,pole
+p6,Sweep / Eight-fluted Pole,60,pole
+p7,Whale Whisker,90,pole
+p8,Kanya,180,pole
+mc1,Mace / Bronze Mace,30,mace
+mc2,Bhuj / Mitre,40,mace
+mc3,Thorned Mace / Chaos Mace,60,mace
+mc4,Doom Mace / Zeus Mace,80,mace
+mc5,Grande Mace / Byblo's Bone,130,mace
+gs1,Claymore,50,greatsword
+gs2,Defender / Save the Queen,70,greatsword
+gs3,Ultima Blade,80,greatsword
+gs4,Ragnarok,100,greatsword
+gs5,Excalibur,135,greatsword
+gs6,Excalipoor,150,greatsword
+gs7,Tournesol,225,greatsword
+r1,Rod / Serpent Rod,20,rod
+r2,Healing Rod / Gaia Rod,30,rod
+r3,Power Rod / Empyrean Rod,40,rod
+r4,Holy Rod,50,rod
+r5,Rod of Faith,130,rod
+c1,Bowgun / Crossbow,25,crossbow
+c2,Paramina Crossbow / Recurve Crossbow,50,crossbow
+c3,Hunting Crowssbow / Penetrator Crossbow,60,crossbow
+c4,Gastrophetes / Tula,115,crossbow
+sp1,Javelin / Spear,20,spear
+sp2,Partisan / Heavy Lance,25,spear
+sp3,Storm Spear / Obelisk,35,spear
+sp4,Halberd / Trident,50,spear
+sp5,Holy Lance / Gungnir,60,spear
+sp6,Dragon Whisker,70,spear
+sp7,Vrsabha,100,spear
+sp8,Zodiac Spear,240,spear
+swo1,Broadsword,15,sword
+swo2,Longsword / Iron Sword,25,sword
+swo3,Zwill Blade / Ancient Sword,35,sword
+swo4,Lohengrin / Flametongue,50,sword
+swo5,Demonsbane / Icebrand,55,sword
+swo6,Platinum Sword / Bastard Sword,60,sword
+swo7,Diamond Sword / Runeblade,70,sword
+swo8,Deatherbringer / Stoneblade,80,sword
+swo9,Durandal / Simha,90,sword
+swo10,Bloodsword,50,sword
+swo11,Karkata,80,sword
+ah1,Handaxe,20,axehammer
+ah2,Broadaxe / Iron Hammer,24,axehammer
+ah3,Slasher / Warhammer,35,axehammer
+ah4,Hammerhead / Sledgehammer,50,axehammer
+ah5,Francisca / Morning Star,60,axehammer
+ah6,Greataxe / Golden Axe,65,axehammer
+ah7,Scorpion Tail,85,axehammer
+ah8,Vrscika,175,axehammer

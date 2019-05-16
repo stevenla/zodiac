@@ -1,9 +1,9 @@
-import React, {createContext, useState, useCallback, useMemo} from 'react';
+import React, {createContext, useCallback, useMemo} from 'react';
 import {StyleSheet} from './styles';
 import {HighlightProvider} from './HighlightContext';
 import {Character} from './Character';
-import {LicenseId, License} from './License';
-import {useStoredState} from './Job';
+import {LicenseId} from './License';
+import useStoredState from './useStoredState';
 
 interface EsperContextType {
   usedEspers: Map<LicenseId, string>;
@@ -32,7 +32,7 @@ const EsperProvider: React.FC = ({children}) => {
       newMap.set(id, name);
       setUsedEspers(newMap);
     },
-    [usedEspers],
+    [usedEspers, setUsedEspers],
   );
   const removeEsper = useCallback(
     (id: LicenseId) => {
@@ -40,7 +40,7 @@ const EsperProvider: React.FC = ({children}) => {
       newMap.delete(id);
       setUsedEspers(newMap);
     },
-    [usedEspers],
+    [usedEspers, setUsedEspers],
   );
   const value: EsperContextType = useMemo(
     () => ({usedEspers: usedEspers || new Map(), addEsper, removeEsper}),

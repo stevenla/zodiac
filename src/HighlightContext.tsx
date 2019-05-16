@@ -1,4 +1,9 @@
-import React, {useState, useContext, useEffect} from 'react';
+/**
+ * Creates a context where Licenses can be highlighted across all displayed
+ * boards. We use a separate store instead of just setting state so that we
+ * don't update all cells if their highlight state hasn't changed.
+ */
+import React, {useState, useContext, useEffect, useMemo} from 'react';
 import {LicenseId} from './License';
 
 type HighlightListener = (ids: Set<LicenseId>) => boolean;
@@ -29,15 +34,23 @@ class HighlightStore {
       this.triggerListeners();
     }
   };
+  clearHighlights = () => {
+    this.highlightedIds.clear();
+    this.triggerListeners();
+  };
 }
 
-export const HighlightContext = React.createContext<HighlightStore>(
+const HighlightContext = React.createContext<HighlightStore>(
   new HighlightStore(),
 );
 
 interface HighlightProviderProps {
   children: React.ReactNode;
 }
+
+/**
+ * Creates a store that can save which elements are being highlighted
+ */
 export const HighlightProvider: React.FC<HighlightProviderProps> = ({
   children,
 }) => {
@@ -49,13 +62,27 @@ export const HighlightProvider: React.FC<HighlightProviderProps> = ({
   );
 };
 
+interface ContextSet {
+  add(id: LicenseId): void;
+  delete(id: LicenseId): void;
+  clear(): void;
+}
+
 export function useHighlight(
   isHighlighting: HighlightListener,
-): [boolean, (id: LicenseId) => void, (id: LicenseId) => void] {
+): [boolean, ContextSet] {
   const [isHighlighted, setIsHighlighted] = useState(false);
   const store = useContext(HighlightContext);
+  const contextSet: ContextSet = useMemo(
+    () => ({
+      add: store.addHighlight,
+      delete: store.removeHighlight,
+      clear: store.clearHighlights,
+    }),
+    [store],
+  );
   useEffect(() => {
-    let lastHighlighted = isHighlighted;
+    let lastHighlighted = false;
     const listener: HighlightListener = ids => {
       const is = isHighlighting(ids);
       if (is !== lastHighlighted) {
@@ -66,6 +93,6 @@ export function useHighlight(
     };
     store.addListener(listener);
     return () => store.removeListener(listener);
-  }, [isHighlighting]);
-  return [isHighlighted, store.addHighlight, store.removeHighlight];
+  }, [store, isHighlighting]);
+  return [isHighlighted, contextSet];
 }

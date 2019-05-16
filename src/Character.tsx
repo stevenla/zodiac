@@ -3,8 +3,9 @@ import {Board, getBoard} from './Board';
 import {Job} from './types';
 import {StyleSheet} from './styles';
 import {LicenseId, License} from './License';
-import {JobSelector, useStoredState} from './Job';
+import {JobSelector} from './Job';
 import {EsperContext} from './App';
+import useStoredState from './useStoredState';
 
 function addQuickening(arr: LicenseId[], q: LicenseId): LicenseId[] {
   if (arr.length >= 3) {
@@ -138,7 +139,7 @@ export const Character: React.FC<CharacterProps> = ({name}) => {
       }
     }
     return e;
-  }, [esperContext.usedEspers]);
+  }, [name, esperContext.usedEspers]);
   const board = useMemo(
     () => new CharacterBoard(job1, job2, quickenings || [], espers || []),
     [job1, job2, quickenings, espers],

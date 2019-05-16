@@ -1,7 +1,7 @@
 import React, {useContext, useCallback} from 'react';
 import {merge, StyleSheet} from './styles';
 import {License, LicenseId} from './License';
-import {HighlightContext, useHighlight} from './HighlightContext';
+import {useHighlight} from './HighlightContext';
 import {EsperContext} from './App';
 
 interface CellProps {
@@ -12,7 +12,7 @@ interface CellProps {
 
 export const Cell: React.FC<CellProps> = ({id, active = false, onClick}) => {
   const {usedEspers} = useContext(EsperContext);
-  const [isHighlighting, addHighlighting, removeHighlighting] = useHighlight(
+  const [isHighlighting, highlightStore] = useHighlight(
     useCallback(ids => ids.has(id as LicenseId), [id]),
   );
   const [isHovering, setHovering] = React.useState<boolean>(false);
@@ -31,11 +31,11 @@ export const Cell: React.FC<CellProps> = ({id, active = false, onClick}) => {
           style={merge(!active && styles.cellInactive)}
           onMouseEnter={() => {
             setHovering(true);
-            addHighlighting(id as LicenseId);
+            highlightStore.add(id as LicenseId);
           }}
           onMouseLeave={() => {
             setHovering(false);
-            removeHighlighting(id as LicenseId);
+            highlightStore.delete(id as LicenseId);
           }}>
           <img
             alt={license.name}

@@ -1,7 +1,7 @@
-import React, {useContext} from 'react';
+import React, {useContext, useCallback} from 'react';
 import {merge, StyleSheet} from './styles';
 import {License, LicenseId} from './License';
-import {HighlightContext} from './HighlightContext';
+import {HighlightContext, useHighlight} from './HighlightContext';
 import {EsperContext} from './App';
 
 interface CellProps {
@@ -12,14 +12,16 @@ interface CellProps {
 
 export const Cell: React.FC<CellProps> = ({id, active = false, onClick}) => {
   const {usedEspers} = useContext(EsperContext);
-  const {highlighting, setHighlighting} = useContext(HighlightContext);
+  const [isHighlighting, addHighlighting, removeHighlighting] = useHighlight(
+    useCallback(ids => ids.has(id as LicenseId), [id]),
+  );
   const [isHovering, setHovering] = React.useState<boolean>(false);
   const license = License.get(id);
   return (
     <div
       style={merge(
         styles.cell,
-        (isHovering || (highlighting != null && highlighting === id)) &&
+        (isHovering || (isHighlighting != null && isHighlighting)) &&
           styles.cellHover,
       )}>
       {license && (
@@ -29,11 +31,11 @@ export const Cell: React.FC<CellProps> = ({id, active = false, onClick}) => {
           style={merge(!active && styles.cellInactive)}
           onMouseEnter={() => {
             setHovering(true);
-            setHighlighting(id as LicenseId);
+            addHighlighting(id as LicenseId);
           }}
           onMouseLeave={() => {
             setHovering(false);
-            setHighlighting(null);
+            removeHighlighting(id as LicenseId);
           }}>
           <img
             alt={license.name}

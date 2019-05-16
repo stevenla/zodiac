@@ -36,6 +36,38 @@ export const JobSelector: React.FC<JobSelectorProps> = ({value, onChange}) => {
   );
 };
 
+function getStoreInHash() {
+  try {
+    const hash = window.location.hash;
+    console.log(decodeURI(hash.slice(1)));
+    return JSON.parse(decodeURI(hash.slice(1))) as {[key: string]: string};
+  } catch (_) {
+    return {};
+  }
+}
+
+function getStoreValue(key: string): null | string {
+  const store = getStoreInHash();
+  const value = store[key];
+  if (value == null) {
+    return null;
+  }
+  return value;
+}
+
+function setStoreValue(key: string, value: string): void {
+  const store = getStoreInHash();
+  store[key] = value;
+  console.log(store);
+  window.location.hash = JSON.stringify(store);
+}
+
+function removeStoreValue(key: string): void {
+  const store = getStoreInHash();
+  delete store[key];
+  window.location.hash = JSON.stringify(store);
+}
+
 export function useStoredState<T>(
   name: string,
   key: string,
@@ -43,9 +75,9 @@ export function useStoredState<T>(
   deserializer: (val: string) => T = JSON.parse,
 ): [null | T, (val: null | T) => any] {
   // TODO: store in URL instead of local storage
-  const storageKey = `zodiac-val-${name}-${key}`;
+  const storageKey = `${name}-${key}`;
   const [value, setter] = useState<null | T>(() => {
-    const storedValue = localStorage.getItem(storageKey);
+    const storedValue = getStoreValue(storageKey);
     if (storedValue == null) {
       return null;
     }
@@ -55,10 +87,9 @@ export function useStoredState<T>(
   const storageSetter = useCallback(
     (val: null | T) => {
       if (val == null) {
-        console.log(name, key);
-        localStorage.removeItem(storageKey);
+        removeStoreValue(storageKey);
       } else {
-        localStorage.setItem(storageKey, serializer(val));
+        setStoreValue(storageKey, serializer(val));
       }
       setter(val);
     },

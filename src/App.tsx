@@ -22,7 +22,7 @@ export const EsperContext = createContext<EsperContextType>(
 const EsperProvider: React.FC = ({children}) => {
   const [usedEspers, setUsedEspers] = useStoredState<Map<LicenseId, string>>(
     'espers',
-    'espers',
+    'all',
     map => JSON.stringify(Array.from(map)),
     str => new Map(JSON.parse(str)),
   );

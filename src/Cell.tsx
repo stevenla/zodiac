@@ -1,25 +1,35 @@
 import React from 'react';
-import { StyleSheet } from './types';
-import { License } from './License';
+import {merge, StyleSheet} from './styles';
+import {License, LicenseId} from './License';
+import {HighlightContext} from './HighlightContext';
 
 interface CellProps {
   id: null | string;
   active?: boolean;
 }
 
-export const Cell: React.FC<CellProps> = ({ id, active = false }) => {
+export const Cell: React.FC<CellProps> = ({id, active = true}) => {
+  const {highlighting, setHighlighting} = React.useContext(HighlightContext);
   const [isHovering, setHovering] = React.useState<boolean>(false);
   const license = License.get(id);
-  if (id == null) {
-    return <div style={styles.cell} />;
-  }
   return (
-    <div style={styles.cell}>
+    <div
+      style={merge(
+        styles.cell,
+        (isHovering || (highlighting != null && highlighting === id)) &&
+          styles.cellHover,
+        !active && styles.cellInactive,
+      )}>
       {license && (
         <div
-          onMouseEnter={() => setHovering(true)}
-          onMouseLeave={() => setHovering(false)}
-        >
+          onMouseEnter={() => {
+            setHovering(true);
+            setHighlighting(id as LicenseId);
+          }}
+          onMouseLeave={() => {
+            setHovering(false);
+            setHighlighting(null);
+          }}>
           <img
             alt={license.name}
             style={styles.icon}
@@ -31,7 +41,15 @@ export const Cell: React.FC<CellProps> = ({ id, active = false }) => {
         </div>
       )}
       {isHovering && license && (
-        <div style={styles.tooltip}>{license.name}</div>
+        <div style={styles.tooltip}>
+          <div style={styles.tooltipTitle}>{license.getDisplayName()}</div>
+          {license.getDescription().map(line => (
+            <div key={line} style={styles.tooltipLine}>
+              {line}
+            </div>
+          ))}
+          <div style={styles.tooltipCost}>{license.cost} LP</div>
+        </div>
       )}
     </div>
   );
@@ -42,12 +60,21 @@ const styles: StyleSheet = {
     position: 'relative',
     display: 'flex',
     width: 16,
-    height: 16
+    height: 16,
+  },
+  cellInactive: {
+    opacity: 0.5,
+  },
+  cellHover: {
+    backgroundColor: '#d3e7fa',
+    borderRadius: 100,
+    boxShadow: '0px 0px 0px 4px #d3e7fa, 0px 0px 0px 6px #6189EB',
+    zIndex: 900,
   },
   icon: {
     width: 16,
     height: 16,
-    imageRendering: 'pixelated'
+    imageRendering: 'pixelated',
   },
   number: {
     fontSize: 10,
@@ -57,17 +84,32 @@ const styles: StyleSheet = {
     borderRadius: 100,
     position: 'absolute',
     top: 1,
-    right: 1
+    right: 1,
   },
   tooltip: {
     fontSize: 12,
+    lineHeight: '14px',
     position: 'absolute',
-    width: 120,
-    backgroundColor: '#ddd',
-    padding: 8,
+    backgroundColor: '#eee',
+    padding: '6px 12px 6px 8px',
     borderRadius: 8,
-    left: 16,
-    top: 16,
-    zIndex: 999
-  }
+    left: 18,
+    top: -4,
+    zIndex: 999,
+    border: '2px solid white',
+    pointerEvents: 'none',
+    opacity: 0.8,
+  },
+  tooltipTitle: {
+    fontWeight: 700,
+    whiteSpace: 'nowrap',
+  },
+  tooltipLine: {
+    whiteSpace: 'nowrap',
+  },
+  tooltipCost: {
+    whiteSpace: 'nowrap',
+    marginTop: 2,
+    fontSize: 8,
+  },
 };

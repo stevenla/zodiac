@@ -19,9 +19,7 @@
  *   - number
  */
 
-import { LicenseId } from './License';
-
-export type StyleSheet = { [sheet: string]: React.CSSProperties };
+import {LicenseId} from './License';
 
 export enum Job {
   Archer,
@@ -35,11 +33,5 @@ export enum Job {
   TimeBattlemage,
   Uhlan,
   Knight,
-  Foebreaker
-}
-
-export interface Character {
-  jobs: [Job, Job];
-  summons: Array<LicenseId>;
-  quickenings: Array<LicenseId>;
+  Foebreaker,
 }

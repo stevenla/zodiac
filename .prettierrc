@@ -1,0 +1,10 @@
+{
+  "extends": [
+    "plugin:prettier/recommended",
+    "prettier/react"
+  ],
+  "bracketSpacing": false,
+  "jsxBracketSameLine": true,
+  "singleQuote": true,
+  "trailingComma": "all"
+}

@@ -26,6 +26,4 @@ const writeFile = util.promisify(fs.writeFile);
     const destinationPath = path.join(destination, `${basename}.json`);
     promises.push(writeFile(destinationPath, contents, 'utf8'));
   }
-  // const csv = await readFile(process.argv[2], 'utf8');
-  // console.log(JSON.stringify(lines));
 })();

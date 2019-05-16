@@ -1,17 +1,70 @@
-import React from 'react';
-import {Board} from './Board';
-import {Job} from './types';
+import React, {createContext, useState, useCallback, useMemo} from 'react';
 import {StyleSheet} from './styles';
 import {HighlightProvider} from './HighlightContext';
 import {Character} from './Character';
+import {LicenseId, License} from './License';
+import {useStoredState} from './Job';
+
+interface EsperContextType {
+  usedEspers: Map<LicenseId, string>;
+  addEsper: (id: LicenseId, name: string) => any;
+  removeEsper: (id: LicenseId) => any;
+}
+const DEFAULT_ESPER_CONTEXT: EsperContextType = {
+  usedEspers: new Map(),
+  addEsper: () => {},
+  removeEsper: () => {},
+};
+export const EsperContext = createContext<EsperContextType>(
+  DEFAULT_ESPER_CONTEXT,
+);
+
+const EsperProvider: React.FC = ({children}) => {
+  const [usedEspers, setUsedEspers] = useStoredState<Map<LicenseId, string>>(
+    'espers',
+    'espers',
+    map => JSON.stringify(Array.from(map)),
+    str => new Map(JSON.parse(str)),
+  );
+  const addEsper = useCallback(
+    (id: LicenseId, name: string) => {
+      const newMap = new Map(usedEspers || new Map());
+      newMap.set(id, name);
+      setUsedEspers(newMap);
+    },
+    [usedEspers],
+  );
+  const removeEsper = useCallback(
+    (id: LicenseId) => {
+      const newMap = new Map(usedEspers || new Map());
+      newMap.delete(id);
+      setUsedEspers(newMap);
+    },
+    [usedEspers],
+  );
+  const value: EsperContextType = useMemo(
+    () => ({usedEspers: usedEspers || new Map(), addEsper, removeEsper}),
+    [usedEspers, addEsper, removeEsper],
+  );
+  return (
+    <EsperContext.Provider value={value}>{children}</EsperContext.Provider>
+  );
+};
 
 const App: React.FC = () => {
   return (
-    <HighlightProvider>
-      <div style={styles.app}>
-        <Character name="Vaan" />
-      </div>
-    </HighlightProvider>
+    <EsperProvider>
+      <HighlightProvider>
+        <div style={styles.app}>
+          <Character name="Vaan" />
+          <Character name="Balthier" />
+          <Character name="Fran" />
+          <Character name="Basch" />
+          <Character name="Ashe" />
+          <Character name="Penelo" />
+        </div>
+      </HighlightProvider>
+    </EsperProvider>
   );
 };
 

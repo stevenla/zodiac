@@ -13,6 +13,7 @@ export const HighlightContext = React.createContext<HighlightContextType>({
 interface HighlightProviderProps {
   children: React.ReactNode;
 }
+// TODO: make it so the context consumers are subscribing to state updates instead of updating all of the consumers at once
 export const HighlightProvider: React.FC<HighlightProviderProps> = ({
   children,
 }) => {

@@ -84,6 +84,16 @@ export class License {
         return 'Katanas';
       case 'genjiarmor':
         return 'Genji Armor';
+      case 'axehammer':
+        return 'Axes and Hammers';
+      case 'gun':
+        return 'Guns';
+      case 'spear':
+        return 'Spears';
+      case 'staff':
+        return 'Staves';
+      case 'shieldblock':
+        return 'Shield Block';
       case 'passive':
         return this.name;
       case 'battlelore':
@@ -110,19 +120,12 @@ export class License {
     return `${this.getDisplayCategory()} ${this.sequence}`;
   }
   getDescription(): Array<string> {
-    if (
-      [
-        'board',
-        'quickening',
-        'gambit',
-        'channelling',
-        'swiftness',
-        'passive',
-      ].includes(this.category) ||
-      this.category.includes('lore')
-    ) {
+    if (['board', 'passive'].includes(this.category)) {
       return [];
     }
-    return this.name.split('/').map(name => name.trim());
+    return this.name
+      .split('/')
+      .map(name => name.trim())
+      .filter(name => name !== this.getDisplayName());
   }
 }

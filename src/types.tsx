@@ -19,19 +19,17 @@
  *   - number
  */
 
-import {LicenseId} from './License';
-
 export enum Job {
-  Archer,
-  Shikari,
-  Machinist,
-  Monk,
-  Bushi,
-  RedBattlemage,
-  WhiteMage,
-  BlackMage,
-  TimeBattlemage,
-  Uhlan,
-  Knight,
-  Foebreaker,
+  Archer = 'archer',
+  Shikari = 'shikari',
+  Machinist = 'machinist',
+  Monk = 'monk',
+  Bushi = 'bushi',
+  RedBattlemage = 'redbattlemage',
+  WhiteMage = 'whitemage',
+  BlackMage = 'blackmage',
+  TimeBattlemage = 'timebattlemage',
+  Uhlan = 'uhlan',
+  Knight = 'knight',
+  Foebreaker = 'foebreaker',
 }

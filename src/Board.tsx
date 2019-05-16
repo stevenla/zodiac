@@ -2,12 +2,15 @@ import React from 'react';
 import {Job} from './types';
 import {Cell} from './Cell';
 import {StyleSheet} from './styles';
+import {LicenseId} from './License';
 
 interface BoardProps {
+  licenses: Set<LicenseId>;
   job: Job;
+  onClick: (id: LicenseId) => any;
 }
 
-function getBoard(job: Job): Array<Array<null | string>> {
+export function getBoard(job: Job): Array<Array<null | string>> {
   switch (job) {
     case Job.Archer:
       return require('./data/archer.json');
@@ -38,13 +41,18 @@ function getBoard(job: Job): Array<Array<null | string>> {
   }
 }
 
-export const Board: React.FC<BoardProps> = ({job}) => {
+export const Board: React.FC<BoardProps> = ({licenses, job, onClick}) => {
   return (
     <div style={styles.board}>
       {getBoard(job).map((row, rowIndex) => (
         <div key={rowIndex} style={styles.row}>
-          {row.map((cell, cellIndex) => (
-            <Cell key={cellIndex} id={cell} />
+          {row.map((id, colIndex) => (
+            <Cell
+              onClick={onClick}
+              key={colIndex}
+              id={id}
+              active={licenses.has(id as LicenseId)}
+            />
           ))}
         </div>
       ))}

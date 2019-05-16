@@ -1,87 +1,196 @@
-import React, {useState, useCallback} from 'react';
-import {Board} from './Board';
+import React, {useMemo, useContext} from 'react';
+import {Board, getBoard} from './Board';
 import {Job} from './types';
 import {StyleSheet} from './styles';
-import {LicenseId} from './License';
+import {LicenseId, License} from './License';
+import {JobSelector, useStoredState} from './Job';
+import {EsperContext} from './App';
 
-interface CharacterData {
-  jobs: [Job, Job];
-  summons: Array<LicenseId>;
-  quickenings: Array<LicenseId>;
+function addQuickening(arr: LicenseId[], q: LicenseId): LicenseId[] {
+  if (arr.length >= 3) {
+    return arr;
+  }
+  return [...arr, q];
 }
 
-interface JobSelectorProps {
-  value: null | Job;
-  onChange: (job: null | Job) => any;
+function removeQuickening(arr: LicenseId[], q: LicenseId): LicenseId[] {
+  return arr.filter(v => v !== q);
 }
-const JobSelector: React.FC<JobSelectorProps> = ({value, onChange}) => {
-  return (
-    <select
-      value={value || undefined}
-      onChange={e => {
-        const value = e.target.value;
-        if (value === 'None') {
-          onChange(null);
-        } else {
-          onChange(Number(e.target.value));
-        }
-      }}>
-      <option value="None">None</option>
-      <option value={Job.Archer}>Archer</option>
-      <option value={Job.BlackMage}>Black Mage</option>
-      <option value={Job.Bushi}>Bushi</option>
-      <option value={Job.Foebreaker}>Foebreaker</option>
-      <option value={Job.Knight}>Knight</option>
-      <option value={Job.Machinist}>Machinist</option>
-      <option value={Job.Monk}>Monk</option>
-      <option value={Job.RedBattlemage}>Red Battlemage</option>
-      <option value={Job.Shikari}>Shikari</option>
-      <option value={Job.TimeBattlemage}>Time Battlemage</option>
-      <option value={Job.Uhlan}>Uhlan</option>
-      <option value={Job.WhiteMage}>WhiteMage</option>
-    </select>
-  );
-};
 
-function useJob(name: string): [null | Job, (job: null | Job) => any] {
-  const storageKey = `zodiac-job-${name}`;
-  const [value, setter] = useState<null | Job>(() => {
-    const storedValue = localStorage.getItem(storageKey);
-    if (storedValue == null) {
-      return null;
-    }
-    const storage = JSON.parse(storedValue) as Job;
-    return storage;
-  });
-  const storageSetter = useCallback(
-    (job: null | Job) => {
-      if (job == null) {
-        localStorage.removeItem(storageKey);
-      } else {
-        localStorage.setItem(storageKey, JSON.stringify(job));
+function getAt(
+  board: (string | null)[][],
+  rowIndex: number,
+  colIndex: number,
+): LicenseId | null {
+  const row = board[rowIndex];
+  if (row == null) {
+    return null;
+  }
+  return (row[colIndex] as LicenseId) || null;
+}
+
+function getAdjacents(
+  board: (string | null)[][],
+  id: LicenseId,
+): Array<LicenseId> {
+  const adjacents: LicenseId[] = [];
+  board.forEach((row, rowIndex) => {
+    row.forEach((cell, colIndex) => {
+      if (cell === id) {
+        const up = getAt(board, rowIndex - 1, colIndex);
+        if (up) adjacents.push(up);
+        const down = getAt(board, rowIndex + 1, colIndex);
+        if (down) adjacents.push(down);
+        const left = getAt(board, rowIndex, colIndex - 1);
+        if (left) adjacents.push(left);
+        const right = getAt(board, rowIndex, colIndex + 1);
+        if (right) adjacents.push(right);
       }
-      setter(job);
-    },
-    [name],
-  );
-  return [value, storageSetter];
+    });
+  });
+  return adjacents;
+}
+
+class CharacterBoard {
+  licenses: Set<LicenseId>;
+  constructor(
+    job1: null | Job,
+    job2: null | Job,
+    quickenings: Array<LicenseId>,
+    espers: Array<LicenseId>,
+  ) {
+    const licenses: Set<LicenseId> = new Set();
+    const searchQueue: Set<LicenseId> = new Set(['o' as LicenseId]);
+    const board1 = job1 == null ? null : getBoard(job1);
+    const board2 = job2 == null ? null : getBoard(job2);
+    let cnt = 0;
+    while (searchQueue.size > 0) {
+      if (cnt++ === 100) {
+        break;
+      }
+      for (const id of searchQueue) {
+        if (cnt++ === 100) {
+          break;
+        }
+        const license = License.get(id);
+        searchQueue.delete(id);
+        if (license) {
+          const isLock = ['summon', 'quickening'].includes(license.category);
+          const shouldFind =
+            !isLock || quickenings.includes(id) || espers.includes(id);
+          if (shouldFind) {
+            licenses.add(id);
+            if (board1) {
+              getAdjacents(board1, id).forEach(adj => {
+                if (!licenses.has(adj)) searchQueue.add(adj);
+              });
+            }
+            if (board2) {
+              getAdjacents(board2, id).forEach(adj => {
+                if (!licenses.has(adj)) searchQueue.add(adj);
+              });
+            }
+          }
+        }
+      }
+    }
+    this.licenses = licenses;
+  }
+
+  getLicensesByCategory(category: string): License[] {
+    const licenses: License[] = [];
+    for (const id of this.licenses) {
+      const license = License.get(id);
+      if (license && license.category === category) {
+        licenses.push(license);
+      }
+    }
+    return licenses;
+  }
+
+  getHP(): number {
+    let hp = 0;
+    const licenses = this.getLicensesByCategory('hp');
+    for (const license of licenses) {
+      const num = Number(license.name.replace(/[^0-9]*/g, ''));
+      hp += num;
+    }
+    return hp;
+  }
 }
 
 interface CharacterProps {
   name: string;
 }
 export const Character: React.FC<CharacterProps> = ({name}) => {
-  const [job1, setJob1] = useJob(name + '1');
-  const [job2, setJob2] = useJob(name + '2');
+  const [job1, setJob1] = useStoredState<Job>(name, 'job1');
+  const [job2, setJob2] = useStoredState<Job>(name, 'job2');
+  const [quickenings, setQuickenings] = useStoredState<Array<LicenseId>>(
+    name,
+    'quickenings',
+  );
+  const esperContext = useContext(EsperContext);
+  const espers: LicenseId[] = useMemo(() => {
+    const e: LicenseId[] = [];
+    for (const [esperId, user] of esperContext.usedEspers) {
+      if (user === name) {
+        e.push(esperId);
+      }
+    }
+    return e;
+  }, [esperContext.usedEspers]);
+  const board = useMemo(
+    () => new CharacterBoard(job1, job2, quickenings || [], espers || []),
+    [job1, job2, quickenings, espers],
+  );
+  const handleClick = (id: LicenseId) => {
+    const license = License.get(id);
+    if (!license) {
+      return;
+    }
+    const alreadyHas = board.licenses.has(id);
+    if (license.category === 'summon') {
+      if (alreadyHas) {
+        esperContext.removeEsper(id);
+      } else {
+        esperContext.addEsper(id, name);
+      }
+    } else if (license.category === 'quickening') {
+      if (alreadyHas) {
+        console.log('remove quickenings?');
+        setQuickenings(removeQuickening(quickenings || [], id));
+      } else {
+        setQuickenings(addQuickening(quickenings || [], id));
+      }
+    }
+  };
   return (
     <div style={styles.root}>
       <h2 style={styles.title}>{name}</h2>
       <div style={styles.row}>
         <div>
+          <div>HP: {board.getHP()}</div>
+          {[
+            'swiftness',
+            'battlelore',
+            'magicklore',
+            'phoenixlore',
+            'potionlore',
+          ].map(category => (
+            <div key={category}>
+              {category}: {board.getLicensesByCategory(category).length}
+            </div>
+          ))}
+        </div>
+        <div>
           <JobSelector value={job1} onChange={setJob1} />
           {job1 != null && (
             <div style={styles.board}>
-              <Board job={job1} />
+              <Board
+                job={job1}
+                licenses={board.licenses}
+                onClick={handleClick}
+              />
             </div>
           )}
         </div>
@@ -89,7 +198,11 @@ export const Character: React.FC<CharacterProps> = ({name}) => {
           <JobSelector value={job2} onChange={setJob2} />
           {job2 != null && (
             <div style={styles.board}>
-              <Board job={job2} />
+              <Board
+                job={job2}
+                licenses={board.licenses}
+                onClick={handleClick}
+              />
             </div>
           )}
         </div>

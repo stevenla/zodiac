@@ -1,15 +1,18 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {merge, StyleSheet} from './styles';
 import {License, LicenseId} from './License';
 import {HighlightContext} from './HighlightContext';
+import {EsperContext} from './App';
 
 interface CellProps {
   id: null | string;
   active?: boolean;
+  onClick: (id: LicenseId) => any;
 }
 
-export const Cell: React.FC<CellProps> = ({id, active = true}) => {
-  const {highlighting, setHighlighting} = React.useContext(HighlightContext);
+export const Cell: React.FC<CellProps> = ({id, active = false, onClick}) => {
+  const {usedEspers} = useContext(EsperContext);
+  const {highlighting, setHighlighting} = useContext(HighlightContext);
   const [isHovering, setHovering] = React.useState<boolean>(false);
   const license = License.get(id);
   return (
@@ -18,10 +21,12 @@ export const Cell: React.FC<CellProps> = ({id, active = true}) => {
         styles.cell,
         (isHovering || (highlighting != null && highlighting === id)) &&
           styles.cellHover,
-        !active && styles.cellInactive,
       )}>
       {license && (
         <div
+          role="button"
+          onClick={() => onClick(id as LicenseId)}
+          style={merge(!active && styles.cellInactive)}
           onMouseEnter={() => {
             setHovering(true);
             setHighlighting(id as LicenseId);
@@ -48,6 +53,11 @@ export const Cell: React.FC<CellProps> = ({id, active = true}) => {
               {line}
             </div>
           ))}
+          {usedEspers.get(license.id) && (
+            <div style={styles.tooltipLine}>
+              Used by {usedEspers.get(license.id)}
+            </div>
+          )}
           <div style={styles.tooltipCost}>{license.cost} LP</div>
         </div>
       )}
@@ -63,7 +73,8 @@ const styles: StyleSheet = {
     height: 16,
   },
   cellInactive: {
-    opacity: 0.5,
+    opacity: 0.4,
+    filter: 'grayscale(.75)',
   },
   cellHover: {
     backgroundColor: '#d3e7fa',

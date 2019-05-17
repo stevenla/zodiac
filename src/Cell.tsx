@@ -7,10 +7,16 @@ import {EsperContext} from './App';
 interface CellProps {
   id: null | string;
   active?: boolean;
-  onClick: (id: LicenseId) => any;
+  onClick?: (id: LicenseId) => any;
+  showSequence?: boolean;
 }
 
-export const Cell: React.FC<CellProps> = ({id, active = false, onClick}) => {
+export const Cell: React.FC<CellProps> = ({
+  id,
+  active = false,
+  onClick = () => {},
+  showSequence = false,
+}) => {
   const {usedEspers} = useContext(EsperContext);
   const [isHighlighting, highlightStore] = useHighlight(
     useCallback(ids => ids.has(id as LicenseId), [id]),
@@ -28,7 +34,12 @@ export const Cell: React.FC<CellProps> = ({id, active = false, onClick}) => {
         <div
           role="button"
           onClick={() => onClick(id as LicenseId)}
-          style={merge(!active && styles.cellInactive)}
+          style={merge(
+            !active && styles.cellInactive,
+
+            ['summon', 'quickening'].includes(license.category) &&
+              styles.cellLock,
+          )}
           onMouseEnter={() => {
             setHovering(true);
             highlightStore.add(id as LicenseId);
@@ -42,9 +53,11 @@ export const Cell: React.FC<CellProps> = ({id, active = false, onClick}) => {
             style={styles.icon}
             src={`/assets/${license.category}.png`}
           />
-          {/* {license.sequence != null && license.sequence !== '+' && (
-            <div style={styles.number}>{license.sequence}</div>
-          )} */}
+          {showSequence &&
+            license.sequence != null &&
+            license.sequence !== '+' && (
+              <div style={styles.number}>{license.sequence}</div>
+            )}
         </div>
       )}
       {isHovering && license && (
@@ -73,6 +86,9 @@ const styles: StyleSheet = {
     display: 'flex',
     width: 16,
     height: 16,
+  },
+  cellLock: {
+    cursor: 'pointer',
   },
   cellInactive: {
     opacity: 0.4,

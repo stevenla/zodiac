@@ -1,11 +1,13 @@
 import React, {useMemo, useContext} from 'react';
-import {Board, getBoard} from './Board';
+import {Board} from './Board';
 import {Job} from './types';
 import {StyleSheet} from './styles';
 import {LicenseId, License} from './License';
 import {JobSelector} from './Job';
 import {EsperContext} from './App';
 import useStoredState from './useStoredState';
+import CharacterBoard from './CharacterBoard';
+import {Cell} from './Cell';
 
 function addQuickening(arr: LicenseId[], q: LicenseId): LicenseId[] {
   if (arr.length >= 3) {
@@ -16,108 +18,6 @@ function addQuickening(arr: LicenseId[], q: LicenseId): LicenseId[] {
 
 function removeQuickening(arr: LicenseId[], q: LicenseId): LicenseId[] {
   return arr.filter(v => v !== q);
-}
-
-function getAt(
-  board: (string | null)[][],
-  rowIndex: number,
-  colIndex: number,
-): LicenseId | null {
-  const row = board[rowIndex];
-  if (row == null) {
-    return null;
-  }
-  return (row[colIndex] as LicenseId) || null;
-}
-
-function getAdjacents(
-  board: (string | null)[][],
-  id: LicenseId,
-): Array<LicenseId> {
-  const adjacents: LicenseId[] = [];
-  board.forEach((row, rowIndex) => {
-    row.forEach((cell, colIndex) => {
-      if (cell === id) {
-        const up = getAt(board, rowIndex - 1, colIndex);
-        if (up) adjacents.push(up);
-        const down = getAt(board, rowIndex + 1, colIndex);
-        if (down) adjacents.push(down);
-        const left = getAt(board, rowIndex, colIndex - 1);
-        if (left) adjacents.push(left);
-        const right = getAt(board, rowIndex, colIndex + 1);
-        if (right) adjacents.push(right);
-      }
-    });
-  });
-  return adjacents;
-}
-
-class CharacterBoard {
-  licenses: Set<LicenseId>;
-  constructor(
-    job1: null | Job,
-    job2: null | Job,
-    quickenings: Array<LicenseId>,
-    espers: Array<LicenseId>,
-  ) {
-    const licenses: Set<LicenseId> = new Set();
-    const searchQueue: Set<LicenseId> = new Set(['o' as LicenseId]);
-    const board1 = job1 == null ? null : getBoard(job1);
-    const board2 = job2 == null ? null : getBoard(job2);
-    let cnt = 0;
-    while (searchQueue.size > 0) {
-      if (cnt++ === 100) {
-        break;
-      }
-      for (const id of searchQueue) {
-        if (cnt++ === 100) {
-          break;
-        }
-        const license = License.get(id);
-        searchQueue.delete(id);
-        if (license) {
-          const isLock = ['summon', 'quickening'].includes(license.category);
-          const shouldFind =
-            !isLock || quickenings.includes(id) || espers.includes(id);
-          if (shouldFind) {
-            licenses.add(id);
-            if (board1) {
-              getAdjacents(board1, id).forEach(adj => {
-                if (!licenses.has(adj)) searchQueue.add(adj);
-              });
-            }
-            if (board2) {
-              getAdjacents(board2, id).forEach(adj => {
-                if (!licenses.has(adj)) searchQueue.add(adj);
-              });
-            }
-          }
-        }
-      }
-    }
-    this.licenses = licenses;
-  }
-
-  getLicensesByCategory(category: string): License[] {
-    const licenses: License[] = [];
-    for (const id of this.licenses) {
-      const license = License.get(id);
-      if (license && license.category === category) {
-        licenses.push(license);
-      }
-    }
-    return licenses;
-  }
-
-  getHP(): number {
-    let hp = 0;
-    const licenses = this.getLicensesByCategory('hp');
-    for (const license of licenses) {
-      const num = Number(license.name.replace(/[^0-9]*/g, ''));
-      hp += num;
-    }
-    return hp;
-  }
 }
 
 interface CharacterProps {
@@ -170,18 +70,47 @@ export const Character: React.FC<CharacterProps> = ({name}) => {
       <h2 style={styles.title}>{name}</h2>
       <div style={styles.row}>
         <div>
-          <div>HP: {board.getHP()}</div>
+          {/* Display the portion of these */}
           {[
-            'swiftness',
+            'quickening',
+            'summon',
+            'hp',
             'battlelore',
             'magicklore',
-            'phoenixlore',
-            'potionlore',
+            'swiftness',
+            'channelling',
+            'whitemagick',
+            'blackmagick',
+            'timemagick',
+            'arcanemagick',
+            'greenmagick',
+            'technick',
+            'passive',
           ].map(category => (
-            <div key={category}>
-              {category}: {board.getLicensesByCategory(category).length}
+            <div key={category} style={styles.infoPanel}>
+              {License.getAllByCategory(category).map(license => (
+                <Cell
+                  onClick={handleClick}
+                  key={license.id}
+                  id={license.id}
+                  active={board.hasLicense(license.id)}
+                />
+              ))}
             </div>
           ))}
+          <div style={styles.infoPanel}>
+            {['potionlore', 'phoenixlore', 'remedylore', 'etherlore'].map(
+              category =>
+                License.getAllByCategory(category).map(license => (
+                  <Cell
+                    onClick={handleClick}
+                    key={license.id}
+                    id={license.id}
+                    active={board.hasLicense(license.id)}
+                  />
+                )),
+            )}
+          </div>
         </div>
         <div>
           <JobSelector value={job1} onChange={setJob1} />
@@ -225,5 +154,11 @@ const styles: StyleSheet = {
   },
   board: {
     marginRight: 24,
+  },
+  infoPanel: {
+    width: 256,
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
 };

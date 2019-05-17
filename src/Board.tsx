@@ -62,8 +62,12 @@ export const Board: React.FC<BoardProps> = ({licenses, job, onClick}) => {
 
 const styles: StyleSheet = {
   board: {
+    width: 320,
+    height: 320,
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   row: {
     display: 'flex',

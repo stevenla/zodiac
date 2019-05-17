@@ -1,4 +1,6 @@
 import keyData from './data/key.json';
+import {sortLicense} from './CharacterBoard';
+import memoize from 'lodash/memoize';
 
 export type LicenseId = keyof typeof keyData;
 
@@ -16,20 +18,30 @@ export class License {
     this.category = params.category;
     this.sequence = id.replace(/[A-Za-z]+/, '');
   }
-  private static cache: Map<LicenseId, License> = new Map();
-  static get(id: null | string | LicenseId): null | License {
-    if (id == null || !keyData.hasOwnProperty(id)) {
-      return null;
-    }
-    const licenseId = id as LicenseId;
-    const cached = License.cache.get(licenseId);
-    if (cached != null) {
-      return cached;
-    }
-    const license = new License(licenseId);
-    License.cache.set(licenseId, license);
-    return license;
-  }
+  static get = memoize(
+    (id: null | string | LicenseId): null | License => {
+      if (id == null || !keyData.hasOwnProperty(id)) {
+        return null;
+      }
+      return new License(id as LicenseId);
+    },
+  );
+  static getAllByCategory = memoize(
+    (category: string): License[] => {
+      const licenses = Object.keys(keyData).map(id => {
+        const license = License.get(id);
+        if (!license) {
+          return null;
+        }
+        if (license.category === category) {
+          return license;
+        }
+        return null;
+      });
+      const filtered = licenses.filter(x => x) as License[];
+      return filtered.sort(sortLicense);
+    },
+  );
   getDisplayCategory(): string {
     switch (this.category) {
       case 'whitemagick':
@@ -101,6 +113,7 @@ export class License {
       case 'potionlore':
       case 'phoenixlore':
       case 'remedylore':
+      case 'etherlore':
       case 'swiftness':
         return this.name.replace(/\s*\d+/, '');
       default:

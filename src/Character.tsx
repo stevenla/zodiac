@@ -86,6 +86,7 @@ export const Character: React.FC<CharacterProps> = ({name}) => {
             'greenmagick',
             'technick',
             'passive',
+            'genjiarmor',
           ].map(category => (
             <div key={category} style={styles.infoPanel}>
               {License.getAllByCategory(category).map(license => (

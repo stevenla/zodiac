@@ -69,6 +69,7 @@ export const Character: React.FC<CharacterProps> = ({name}) => {
     <div style={styles.root}>
       <h2 style={styles.title}>{name}</h2>
       <div style={styles.row}>
+        <div>HP: {board.getHP()}</div>
         <div>
           {/* Display the portion of these */}
           {[

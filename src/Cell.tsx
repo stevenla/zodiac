@@ -103,7 +103,6 @@ const styles: StyleSheet = {
   icon: {
     width: 16,
     height: 16,
-    imageRendering: 'pixelated',
   },
   number: {
     fontSize: 10,

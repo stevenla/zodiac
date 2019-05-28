@@ -8,6 +8,7 @@ import {EsperContext} from './App';
 import useStoredState from './useStoredState';
 import CharacterBoard from './CharacterBoard';
 import {Cell} from './Cell';
+import {GatedInfo} from './GatedInfo';
 
 function addQuickening(arr: LicenseId[], q: LicenseId): LicenseId[] {
   if (arr.length >= 3) {
@@ -67,9 +68,12 @@ export const Character: React.FC<CharacterProps> = ({name}) => {
   };
   return (
     <div style={styles.root}>
-      <h2 style={styles.title}>{name}</h2>
+      <h2 style={styles.title}>
+        {name}
+        <GatedInfo board={board} />
+      </h2>
+      <div>HP: {board.getHP()} / 2535</div>
       <div style={styles.row}>
-        <div>HP: {board.getHP()}</div>
         <div>
           {/* Display the portion of these */}
           {[

@@ -91,6 +91,9 @@ export const Character: React.FC<CharacterProps> = ({name}) => {
             'greenmagick',
             'technick',
             'passive',
+            'lightarmor',
+            'heavyarmor',
+            'mysticarmor',
             'genjiarmor',
           ].map(category => (
             <div key={category} style={styles.infoPanel}>

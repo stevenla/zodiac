@@ -72,7 +72,7 @@ export const Character: React.FC<CharacterProps> = ({name}) => {
         {name}
         <GatedInfo board={board} />
       </h2>
-      <div>HP: {board.getHP()} / 2535</div>
+      <div>HP: {board.getHP()} / 3035</div>
       <div style={styles.row}>
         <div>
           {/* Display the portion of these */}

@@ -39,6 +39,7 @@ hp8,+310HP,90,hp
 hp9,+350HP,100,hp
 hp10,+390HP,115,hp
 hp11,+435HP,130,hp
+hp12,+500HP,220,hp
 ma,Martyr,30,passive
 in,Inquisitor,30,passive
 he,Headsman,30,passive

@@ -14,7 +14,7 @@
     "typescript": "3.4.5"
   },
   "scripts": {
-    "make": "./data/scripts/board-csv.js data/csv src/data",
+    "make": "./data/scripts/board-csv.js data/csv src/data; ./data/scripts/key-csv.js data/csv/key.csv > src/data/key.json",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

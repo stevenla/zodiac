@@ -19,7 +19,7 @@ export const Cell: React.FC<CellProps> = ({
 }) => {
   const {usedEspers} = useContext(EsperContext);
   const [isHighlighting, highlightStore] = useHighlight(
-    useCallback(ids => ids.has(id as LicenseId), [id]),
+    useCallback((ids) => ids.has(id as LicenseId), [id]),
   );
   const [isHovering, setHovering] = React.useState<boolean>(false);
   const license = License.get(id);
@@ -51,7 +51,7 @@ export const Cell: React.FC<CellProps> = ({
           <img
             alt={license.name}
             style={styles.icon}
-            src={`/assets/${license.category}.png`}
+            src={`assets/${license.category}.png`}
           />
           {showSequence &&
             license.sequence != null &&
@@ -63,7 +63,7 @@ export const Cell: React.FC<CellProps> = ({
       {isHovering && license && (
         <div style={styles.tooltip}>
           <div style={styles.tooltipTitle}>{license.getDisplayName()}</div>
-          {license.getDescription().map(line => (
+          {license.getDescription().map((line) => (
             <div key={line} style={styles.tooltipLine}>
               {line}
             </div>

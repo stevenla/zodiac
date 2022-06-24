@@ -1,4 +1,4 @@
-import React, {createContext, useCallback, useMemo} from 'react';
+import React, {createContext, StrictMode, useCallback, useMemo} from 'react';
 import {StyleSheet} from './styles';
 import {HighlightProvider} from './HighlightContext';
 import {Character} from './Character';
@@ -19,12 +19,12 @@ export const EsperContext = createContext<EsperContextType>(
   DEFAULT_ESPER_CONTEXT,
 );
 
-const EsperProvider: React.FC = ({children}) => {
+const EsperProvider = ({children}: {children: React.ReactNode}) => {
   const [usedEspers, setUsedEspers] = useStoredState<Map<LicenseId, string>>(
     'espers',
     'all',
-    map => JSON.stringify(Array.from(map)),
-    str => new Map(JSON.parse(str)),
+    (map) => JSON.stringify(Array.from(map)),
+    (str) => new Map(JSON.parse(str)),
   );
   const addEsper = useCallback(
     (id: LicenseId, name: string) => {
@@ -53,18 +53,20 @@ const EsperProvider: React.FC = ({children}) => {
 
 const App: React.FC = () => {
   return (
-    <EsperProvider>
-      <HighlightProvider>
-        <div style={styles.app}>
-          <Character name="Vaan" />
-          <Character name="Balthier" />
-          <Character name="Fran" />
-          <Character name="Basch" />
-          <Character name="Ashe" />
-          <Character name="Penelo" />
-        </div>
-      </HighlightProvider>
-    </EsperProvider>
+    <StrictMode>
+      <EsperProvider>
+        <HighlightProvider>
+          <div style={styles.app}>
+            <Character name="Vaan" />
+            <Character name="Balthier" />
+            <Character name="Fran" />
+            <Character name="Basch" />
+            <Character name="Ashe" />
+            <Character name="Penelo" />
+          </div>
+        </HighlightProvider>
+      </EsperProvider>
+    </StrictMode>
   );
 };
 

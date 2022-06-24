@@ -1,5 +1,5 @@
-import React, {useContext, useCallback} from 'react';
-import {merge, StyleSheet} from './styles';
+import React, {useContext, useCallback, startTransition} from 'react';
+import {css, StyleSheet} from 'aphrodite/no-important';
 import {License, LicenseId} from './License';
 import {useHighlight} from './HighlightContext';
 import {EsperContext} from './App';
@@ -11,76 +11,80 @@ interface CellProps {
   showSequence?: boolean;
 }
 
-export const Cell: React.FC<CellProps> = ({
-  id,
-  active = false,
-  onClick = () => {},
-  showSequence = false,
-}) => {
-  const {usedEspers} = useContext(EsperContext);
-  const [isHighlighting, highlightStore] = useHighlight(
-    useCallback((ids) => ids.has(id as LicenseId), [id]),
-  );
-  const [isHovering, setHovering] = React.useState<boolean>(false);
-  const license = License.get(id);
-  return (
-    <div
-      style={merge(
-        styles.cell,
-        (isHovering || (isHighlighting != null && isHighlighting)) &&
-          styles.cellHover,
-      )}>
-      {license && (
-        <div
-          role="button"
-          onClick={() => onClick(id as LicenseId)}
-          style={merge(
-            !active && styles.cellInactive,
-
-            ['summon', 'quickening'].includes(license.category) &&
-              styles.cellLock,
-          )}
-          onMouseEnter={() => {
-            setHovering(true);
-            highlightStore.add(id as LicenseId);
-          }}
-          onMouseLeave={() => {
-            setHovering(false);
-            highlightStore.delete(id as LicenseId);
-          }}>
-          <img
-            alt={license.name}
-            style={styles.icon}
-            src={`assets/${license.category}.png`}
-          />
-          {showSequence &&
-            license.sequence != null &&
-            license.sequence !== '+' && (
-              <div style={styles.number}>{license.sequence}</div>
+export const Cell = React.memo<CellProps>(
+  ({id, active = false, onClick = () => {}, showSequence = false}) => {
+    const {usedEspers} = useContext(EsperContext);
+    const [isHighlighting, setIsHighlighting] = useHighlight(
+      id as LicenseId | null,
+    );
+    const [isHovering, setHovering] = React.useState<boolean>(false);
+    const license = License.get(id);
+    return (
+      <div
+        className={css(
+          styles.cell,
+          (isHovering || (isHighlighting != null && isHighlighting)) &&
+            styles.cellHover,
+        )}>
+        {license && (
+          <div
+            role="button"
+            onClick={() => onClick(id as LicenseId)}
+            className={css(
+              !active && styles.cellInactive,
+              ['summon', 'quickening'].includes(license.category) &&
+                styles.cellLock,
             )}
-        </div>
-      )}
-      {isHovering && license && (
-        <div style={styles.tooltip}>
-          <div style={styles.tooltipTitle}>{license.getDisplayName()}</div>
-          {license.getDescription().map((line) => (
-            <div key={line} style={styles.tooltipLine}>
-              {line}
+            onMouseEnter={() => {
+              setHovering(true);
+              startTransition(() => {
+                setIsHighlighting(true);
+              });
+              // highlightStore.add(id as LicenseId);
+            }}
+            onMouseLeave={() => {
+              setHovering(false);
+              startTransition(() => {
+                setIsHighlighting(false);
+              });
+              // highlightStore.delete(id as LicenseId);
+            }}>
+            <img
+              alt={license.name}
+              className={css(styles.icon)}
+              src={`${process.env.PUBLIC_URL}/assets/${license.category}.png`}
+            />
+            {showSequence &&
+              license.sequence != null &&
+              license.sequence !== '+' && (
+                <div className={css(styles.number)}>{license.sequence}</div>
+              )}
+          </div>
+        )}
+        {isHovering && license && (
+          <div className={css(styles.tooltip)}>
+            <div className={css(styles.tooltipTitle)}>
+              {license.getDisplayName()}
             </div>
-          ))}
-          {usedEspers.get(license.id) && (
-            <div style={styles.tooltipLine}>
-              Used by {usedEspers.get(license.id)}
-            </div>
-          )}
-          <div style={styles.tooltipCost}>{license.cost} LP</div>
-        </div>
-      )}
-    </div>
-  );
-};
+            {license.getDescription().map((line) => (
+              <div key={line} className={css(styles.tooltipLine)}>
+                {line}
+              </div>
+            ))}
+            {usedEspers.get(license.id) && (
+              <div style={styles.tooltipLine}>
+                Used by {usedEspers.get(license.id)}
+              </div>
+            )}
+            <div style={styles.tooltipCost}>{license.cost} LP</div>
+          </div>
+        )}
+      </div>
+    );
+  },
+);
 
-const styles: StyleSheet = {
+const styles = StyleSheet.create({
   cell: {
     position: 'relative',
     display: 'flex',
@@ -140,4 +144,4 @@ const styles: StyleSheet = {
     marginTop: 2,
     fontSize: 8,
   },
-};
+});

@@ -3,96 +3,63 @@
  * boards. We use a separate store instead of just setting state so that we
  * don't update all cells if their highlight state hasn't changed.
  */
-import React, {useState, useContext, useEffect, useMemo} from 'react';
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useCallback,
+} from 'react';
+import {createContext, useContextSelector} from 'use-context-selector';
 import {LicenseId} from './License';
 
-type HighlightListener = (ids: Set<LicenseId>) => boolean;
+type HighlightContextType = {
+  current: LicenseId | null;
+  setCurrent: (newValue: LicenseId | null) => void;
+};
+const HighlightContext = createContext<HighlightContextType>({
+  current: null,
+  setCurrent: () => {},
+});
 
-class HighlightStore {
-  private highlightedIds: Set<LicenseId> = new Set();
-  private listeners: Set<HighlightListener> = new Set();
-  addListener = (listener: HighlightListener) => {
-    this.listeners.add(listener);
-  };
-  removeListener = (listener: HighlightListener) => {
-    this.listeners.delete(listener);
-  };
-  private triggerListeners() {
-    for (const listener of this.listeners) {
-      listener(this.highlightedIds);
-    }
-  }
-  addHighlight = (id: LicenseId) => {
-    if (!this.highlightedIds.has(id)) {
-      this.highlightedIds.add(id);
-      this.triggerListeners();
-    }
-  };
-  removeHighlight = (id: LicenseId) => {
-    if (this.highlightedIds.has(id)) {
-      this.highlightedIds.delete(id);
-      this.triggerListeners();
-    }
-  };
-  clearHighlights = () => {
-    this.highlightedIds.clear();
-    this.triggerListeners();
-  };
-}
-
-const HighlightContext = React.createContext<HighlightStore>(
-  new HighlightStore(),
-);
-
-interface HighlightProviderProps {
-  children: React.ReactNode;
-}
-
-/**
- * Creates a store that can save which elements are being highlighted
- */
+type HighlightProviderProps = {children: React.ReactNode | React.ReactNode[]};
 export const HighlightProvider: React.FC<HighlightProviderProps> = ({
   children,
 }) => {
-  const [store] = React.useState(() => new HighlightStore());
+  const [current, setCurrent] = useState<LicenseId | null>(null);
+  const ctx = useMemo<HighlightContextType>(
+    () => ({current, setCurrent}),
+    [current, setCurrent],
+  );
   return (
-    <HighlightContext.Provider value={store}>
+    <HighlightContext.Provider value={ctx}>
       {children}
     </HighlightContext.Provider>
   );
 };
 
-interface ContextSet {
-  add(id: LicenseId): void;
-  delete(id: LicenseId): void;
-  clear(): void;
-}
-
 export function useHighlight(
-  isHighlighting: HighlightListener,
-): [boolean, ContextSet] {
-  const [isHighlighted, setIsHighlighted] = useState(false);
-  const store = useContext(HighlightContext);
-  const contextSet: ContextSet = useMemo(
-    () => ({
-      add: store.addHighlight,
-      delete: store.removeHighlight,
-      clear: store.clearHighlights,
-    }),
-    [store],
+  id: LicenseId | null,
+): [boolean, (newValue: boolean) => void] {
+  const isHighlighting = useContextSelector(
+    HighlightContext,
+    (ctx) => !!id && ctx.current === id,
   );
+  const setHighlighting = useContextSelector(
+    HighlightContext,
+    (ctx) => ctx.setCurrent,
+  );
+  const isHighlightingRef = useRef<boolean>(false);
   useEffect(() => {
-    let lastHighlighted = false;
-    const listener: HighlightListener = ids => {
-      const is = isHighlighting(ids);
-      if (is !== lastHighlighted) {
-        setIsHighlighted(is);
-        lastHighlighted = is;
-      }
-      return is;
-    };
-    store.addListener(listener);
-    return () => store.removeListener(listener);
-  }, [store, isHighlighting]);
-  return [isHighlighted, contextSet];
+    isHighlightingRef.current = isHighlighting;
+  }, [isHighlighting]);
+  const setIsHighlighting = useCallback((newValue: boolean) => {
+    if (newValue) {
+      setHighlighting(id);
+    } else if (isHighlightingRef.current) {
+      setHighlighting(null);
+    }
+  }, []);
+  return [isHighlighting, setIsHighlighting];
 }

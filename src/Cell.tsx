@@ -1,8 +1,17 @@
 import React, {useContext, useCallback, startTransition} from 'react';
 import {css, StyleSheet} from 'aphrodite/no-important';
 import {License, LicenseId} from './License';
-import {useHighlight} from './HighlightContext';
 import {EsperContext} from './App';
+import {atom, useAtom, useAtomValue, useSetAtom} from 'jotai';
+import memoize from 'lodash/memoize';
+
+const highlightedAtom = atom<null | LicenseId>(null);
+const getIsHighlighted = memoize((id: null | string) => {
+  return atom((get) => {
+    const highlighted = get(highlightedAtom);
+    return highlighted != null && highlighted === id;
+  });
+});
 
 interface CellProps {
   id: null | string;
@@ -14,17 +23,15 @@ interface CellProps {
 export const Cell = React.memo<CellProps>(
   ({id, active = false, onClick = () => {}, showSequence = false}) => {
     const {usedEspers} = useContext(EsperContext);
-    const [isHighlighting, setIsHighlighting] = useHighlight(
-      id as LicenseId | null,
-    );
+    const isHighlighted = useAtomValue(getIsHighlighted(id));
+    const setHighlighted = useSetAtom(highlightedAtom);
     const [isHovering, setHovering] = React.useState<boolean>(false);
     const license = License.get(id);
     return (
       <div
         className={css(
           styles.cell,
-          (isHovering || (isHighlighting != null && isHighlighting)) &&
-            styles.cellHover,
+          (isHovering || isHighlighted) && styles.cellHover,
         )}>
         {license && (
           <div
@@ -37,17 +44,11 @@ export const Cell = React.memo<CellProps>(
             )}
             onMouseEnter={() => {
               setHovering(true);
-              startTransition(() => {
-                setIsHighlighting(true);
-              });
-              // highlightStore.add(id as LicenseId);
+              setHighlighted(id as LicenseId | null);
             }}
             onMouseLeave={() => {
               setHovering(false);
-              startTransition(() => {
-                setIsHighlighting(false);
-              });
-              // highlightStore.delete(id as LicenseId);
+              setHighlighted(null);
             }}>
             <img
               alt={license.name}

@@ -1,6 +1,5 @@
 import React, {createContext, StrictMode, useCallback, useMemo} from 'react';
 import {StyleSheet} from './styles';
-import {HighlightProvider} from './HighlightContext';
 import {Character} from './Character';
 import {LicenseId} from './License';
 import useStoredState from './useStoredState';
@@ -55,16 +54,14 @@ const App: React.FC = () => {
   return (
     <StrictMode>
       <EsperProvider>
-        <HighlightProvider>
-          <div style={styles.app}>
-            <Character name="Vaan" />
-            <Character name="Balthier" />
-            <Character name="Fran" />
-            <Character name="Basch" />
-            <Character name="Ashe" />
-            <Character name="Penelo" />
-          </div>
-        </HighlightProvider>
+        <div style={styles.app}>
+          <Character name="Vaan" />
+          <Character name="Balthier" />
+          <Character name="Fran" />
+          <Character name="Basch" />
+          <Character name="Ashe" />
+          <Character name="Penelo" />
+        </div>
       </EsperProvider>
     </StrictMode>
   );
